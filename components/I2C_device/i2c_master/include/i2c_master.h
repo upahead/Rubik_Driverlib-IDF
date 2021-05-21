@@ -41,8 +41,9 @@ typedef I2cMaster_t *I2cMaster_handle_t;
   * @param[in]  sda_pin sda pin num.
   * @param[in]  i2c_clk The transmission speed of I2C is generally 400000 or 100000.
   * @retval 
-  *         successful ：return I2C operation handle.
-  *         failed ：return NULL.
+  *         - successful  I2C operation handle.
+  *         - failed      NULL.
+  * @note  Use I2cMaster_Deinit() to release it.
   */
 I2cMaster_handle_t I2cMaster_Init(i2c_port_t I2c_port, gpio_num_t scl_num, gpio_num_t sda_num, 
                                   uint32_t i2c_clk);
@@ -55,6 +56,7 @@ I2cMaster_handle_t I2cMaster_Init(i2c_port_t I2c_port, gpio_num_t scl_num, gpio_
   *         - ESP_OK    successful.
   *         - ESP_FAIL  failed.
   *                     May be caused by no initialization.
+  * @note  Can only be used to release the handle obtained by I2cMaster_Init().
   */
 esp_err_t I2cMaster_Deinit(I2cMaster_handle_t* i2c_handle);
 
@@ -67,8 +69,8 @@ esp_err_t I2cMaster_Deinit(I2cMaster_handle_t* i2c_handle);
   * @param[in]  i2c_clk The transmission speed.
   *                     Make sure that this value is the same as the initialization.
   * @retval 
-  *         successful ：return I2C operation handle.
-  *         failed ：return NULL.
+  *         - successful  I2C operation handle.
+  *         - failed      NULL.
   * @note  Use I2cMaster_DeleteHandleNoInit() to release it.
   * @note  This function is provided for compatibility with this library without modifying 
   *        the original code. It is used when the I2C port has been initialized, otherwise 

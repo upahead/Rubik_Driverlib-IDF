@@ -32,6 +32,15 @@ static const char *TAG = "I2cMaster";
 static bool i2c_num_0_install = false;
 static bool i2c_num_1_install = false;
 
+#define I2C_MASTER_HANDLE_CHECK(a, ret)  if (NULL == a) {                        \
+        ESP_LOGE(TAG, "%s (%d) driver handle is NULL.", __FUNCTION__, __LINE__); \
+        return (ret);                                                            \
+        }
+#define I2C_MASTER_SLAVE_ADDR_CHECK(a, ret)  if (a > 0x7F) {                              \
+        ESP_LOGE(TAG, "%s (%d) i2c slave address format error.", __FUNCTION__, __LINE__); \
+        return (ret);                                                                     \
+        }
+
 /**
   * @brief  Initialize the I2C master and obtain an operation handle.
   * @param[in]  I2c_port esp32 i2c port number, i2c0 or i2c1.
@@ -39,8 +48,8 @@ static bool i2c_num_1_install = false;
   * @param[in]  sda_pin sda pin num.
   * @param[in]  i2c_clk The transmission speed of I2C is generally 400000 or 100000.
   * @retval 
-  *         successful ：return I2C operation handle.
-  *         failed ：return NULL.
+  *         - successful  I2C operation handle.
+  *         - failed      NULL.
   * @note  Use I2cMaster_Deinit() to release it.
   */
 I2cMaster_handle_t I2cMaster_Init(i2c_port_t I2c_port, gpio_num_t scl_num, gpio_num_t sda_num, 
@@ -110,10 +119,7 @@ esp_err_t I2cMaster_Deinit(I2cMaster_handle_t* i2c_handle)
 {
     esp_err_t err = ESP_OK;
 
-    if (NULL == *i2c_handle) {
-        ESP_LOGE(TAG, "%s (%d) driver handle is not initialized.", __FUNCTION__, __LINE__);
-        return ESP_FAIL;
-    }
+    I2C_MASTER_HANDLE_CHECK(*i2c_handle, ESP_FAIL);
 
     err = i2c_driver_delete((*i2c_handle)->i2c_port);
     if (ESP_OK != err) {
@@ -140,8 +146,8 @@ esp_err_t I2cMaster_Deinit(I2cMaster_handle_t* i2c_handle)
   * @param[in]  i2c_clk The transmission speed.
   *                     Make sure that this value is the same as the initialization.
   * @retval 
-  *         successful ：return I2C operation handle.
-  *         failed ：return NULL.
+  *         - successful  I2C operation handle.
+  *         - failed      NULL.
   * @note  Use I2cMaster_DeleteHandleNoInit() to release it.
   * @note  This function is provided for compatibility with this library without modifying 
   *        the original code. It is used when the I2C port has been initialized, otherwise 
@@ -185,12 +191,7 @@ I2cMaster_handle_t I2cMaster_GetHandleNoInit(i2c_port_t I2c_port, uint32_t i2c_c
   */ 
 esp_err_t I2cMaster_DeleteHandleNoInit(I2cMaster_handle_t* i2c_handle)
 {
-    esp_err_t err = ESP_OK;
-
-    if (NULL == *i2c_handle) {
-        ESP_LOGE(TAG, "%s (%d) driver handle NULL.", __FUNCTION__, __LINE__);
-        return ESP_FAIL;
-    }
+    I2C_MASTER_HANDLE_CHECK(*i2c_handle, ESP_FAIL);
 
     if(0 == (*i2c_handle)->i2c_port)
         i2c_num_0_install = false;
@@ -217,14 +218,8 @@ bool I2CMaster_CheckDeviceAlive(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr)
 {
     esp_err_t err = ESP_OK;
 
-    if (NULL == i2c_handle) {
-        ESP_LOGE(TAG, "%s (%d) driver handle is not initialized.", __FUNCTION__, __LINE__);
-        return false;
-    }
-    if (i2c_addr > 0x7f) {
-        ESP_LOGE(TAG, "%s (%d) i2c slave address format error.", __FUNCTION__, __LINE__);
-        return false;
-    }
+    I2C_MASTER_HANDLE_CHECK(i2c_handle, false);
+    I2C_MASTER_SLAVE_ADDR_CHECK(i2c_addr, false);
 
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
@@ -290,14 +285,8 @@ esp_err_t I2cMaster_WriteReg(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr, ui
 {
     esp_err_t ret = ESP_OK;
 
-    if (NULL == i2c_handle) {
-        ESP_LOGE(TAG, "%s (%d) driver handle is not initialized.", __FUNCTION__, __LINE__);
-        return ESP_FAIL;
-    }
-    if (i2c_addr > 0x7f) {
-        ESP_LOGE(TAG, "%s (%d) i2c slave address format error.", __FUNCTION__, __LINE__);
-        return ESP_FAIL;
-    }
+    I2C_MASTER_HANDLE_CHECK(i2c_handle, ESP_FAIL);
+    I2C_MASTER_SLAVE_ADDR_CHECK(i2c_addr, ESP_FAIL);
 
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
@@ -324,14 +313,8 @@ esp_err_t I2cMaster_ReadReg(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr, uin
 {
     esp_err_t ret = ESP_OK;
 
-    if (NULL == i2c_handle) {
-        ESP_LOGE(TAG, "%s (%d) driver handle is not initialized.", __FUNCTION__, __LINE__);
-        return ESP_FAIL;
-    }
-    if (i2c_addr > 0x7f) {
-        ESP_LOGE(TAG, "%s (%d) i2c slave address format error.", __FUNCTION__, __LINE__);
-        return ESP_FAIL;
-    }
+    I2C_MASTER_HANDLE_CHECK(i2c_handle, ESP_FAIL);
+    I2C_MASTER_SLAVE_ADDR_CHECK(i2c_addr, ESP_FAIL);
 
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
@@ -362,14 +345,8 @@ esp_err_t I2cMaster_WriteData(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr, u
 {
     esp_err_t ret = ESP_OK;
 
-    if (NULL == i2c_handle) {
-        ESP_LOGE(TAG, "%s (%d) driver handle is not initialized.", __FUNCTION__, __LINE__);
-        return ESP_FAIL;
-    }
-    if (i2c_addr > 0x7f) {
-        ESP_LOGE(TAG, "%s (%d) i2c slave address format error.", __FUNCTION__, __LINE__);
-        return ESP_FAIL;
-    }
+    I2C_MASTER_HANDLE_CHECK(i2c_handle, ESP_FAIL);
+    I2C_MASTER_SLAVE_ADDR_CHECK(i2c_addr, ESP_FAIL);
 
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
@@ -397,14 +374,8 @@ esp_err_t I2cMaster_ReadData(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr, ui
 {
     esp_err_t ret = ESP_OK;
 
-    if (NULL == i2c_handle) {
-        ESP_LOGE(TAG, "%s (%d) driver handle is not initialized.", __FUNCTION__, __LINE__);
-        return ESP_FAIL;
-    }
-    if (i2c_addr > 0x7f) {
-        ESP_LOGE(TAG, "%s (%d) i2c slave address format error.", __FUNCTION__, __LINE__);
-        return ESP_FAIL;
-    }
+    I2C_MASTER_HANDLE_CHECK(i2c_handle, ESP_FAIL);
+    I2C_MASTER_SLAVE_ADDR_CHECK(i2c_addr, ESP_FAIL);
 
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     i2c_master_start(cmd);
