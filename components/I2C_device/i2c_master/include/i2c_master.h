@@ -36,10 +36,10 @@ typedef I2cMaster_t *I2cMaster_handle_t;
 
 /**
   * @brief  Initialize the I2C master and obtain an operation handle.
-  * @param[in]  I2c_port esp32 i2c port number, i2c0 or i2c1.
-  * @param[in]  scl_pin scl pin num.
-  * @param[in]  sda_pin sda pin num.
-  * @param[in]  i2c_clk The transmission speed of I2C is generally 400000 or 100000.
+  * @param[in]  I2c_port  esp32 i2c port number, i2c0 or i2c1.
+  * @param[in]  scl_pin  scl pin num.
+  * @param[in]  sda_pin  sda pin num.
+  * @param[in]  i2c_clk  The transmission speed of I2C is generally 400000 or 100000.
   * @retval 
   *         - successful  I2C operation handle.
   *         - failed      NULL.
@@ -51,7 +51,7 @@ I2cMaster_handle_t I2cMaster_Init(i2c_port_t I2c_port, gpio_num_t scl_num, gpio_
 /**
   * @brief  I2C master deinitialization.
   *         Release the resources occupied by I2C master.
-  * @param[in]  i2c_handle i2c master operation handle pointer.
+  * @param[in]  i2c_handle  i2c master operation handle pointer.
   * @retval 
   *         - ESP_OK    successful.
   *         - ESP_FAIL  failed.
@@ -64,9 +64,9 @@ esp_err_t I2cMaster_Deinit(I2cMaster_handle_t* i2c_handle);
   * @brief  Get an I2cMaster operation handle of the initialized i2c port.
   *         This function does not initialize the I2C device, but only provides 
   *         an operation handle compatible with this library.
-  * @param[in]  I2c_port esp32 i2c port number, i2c0 or i2c1.
+  * @param[in]  I2c_port  esp32 i2c port number, i2c0 or i2c1.
   *                      Make sure that this port has been initialized.
-  * @param[in]  i2c_clk The transmission speed.
+  * @param[in]  i2c_clk  The transmission speed.
   *                     Make sure that this value is the same as the initialization.
   * @retval 
   *         - successful  I2C operation handle.
@@ -80,7 +80,7 @@ I2cMaster_handle_t I2cMaster_GetHandleNoInit(i2c_port_t I2c_port, uint32_t i2c_c
 
 /**
   * @brief  Delete uninitialized i2c master handle.
-  * @param[in]  i2c_handle i2c master operation handle pointer.
+  * @param[in]  i2c_handle  i2c master operation handle pointer.
   * @retval 
   *         - ESP_OK    successful.
   *         - ESP_FAIL  failed.
@@ -90,8 +90,8 @@ esp_err_t I2cMaster_DeleteHandleNoInit(I2cMaster_handle_t* i2c_handle);
 
 /**
   * @brief  Check if the I2C slave alive.
-  * @param[in]  i2c_handle i2c master operation handle.
-  * @param[in]  i2c_addr i2c slave address(7bit).
+  * @param[in]  i2c_handle  i2c master operation handle.
+  * @param[in]  i2c_addr  i2c slave address(7bit).
   * @retval  
   *         - true    alive
   *         - false   not alive
@@ -102,7 +102,7 @@ bool I2CMaster_CheckDeviceAlive(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr)
 
 /**
   * @brief  Print I2C transmission execution result.
-  * @param[in]  val error number.
+  * @param[in]  val  error number.
   * @retval void
   * @note  This function is generally only used in debugging.
   */
@@ -113,11 +113,11 @@ void I2cMaster_PrintErr(esp_err_t val);
 
 /**
   * @brief  I2C master writes data to the slave register.
-  * @param[in]  i2c_handle i2c master operation handle.
-  * @param[in]  i2c_addr i2c slave address(7bit).
-  * @param[in]  reg_addr i2c slave register address.
-  * @param[in]  data_buf Data pointer.
-  * @param[in]  data_len Data length.
+  * @param[in]  i2c_handle  i2c master operation handle.
+  * @param[in]  i2c_addr  i2c slave address(7bit).
+  * @param[in]  reg_addr  i2c slave register address.
+  * @param[in]  data_buf  Data pointer.
+  * @param[in]  data_len  Data length.
   * @retval  reference esp_err_t.
   */
 esp_err_t I2cMaster_WriteReg(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr, uint8_t reg_addr, 
@@ -125,11 +125,11 @@ esp_err_t I2cMaster_WriteReg(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr, ui
 
 /**
   * @brief  I2C master read slave register data.
-  * @param[in]  i2c_handle i2c master operation handle.
-  * @param[in]  i2c_addr i2c slave address(7bit).
-  * @param[in]  reg_addr i2c slave register address.
-  * @param[out] data_buf Data pointer.
-  * @param[in]  data_len Data length.
+  * @param[in]  i2c_handle  i2c master operation handle.
+  * @param[in]  i2c_addr  i2c slave address(7bit).
+  * @param[in]  reg_addr  i2c slave register address.
+  * @param[out] data_buf  Data pointer.
+  * @param[in]  data_len  Data length.
   * @retval  reference esp_err_t.
   */
 esp_err_t I2cMaster_ReadReg(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr, uint8_t reg_addr, 
@@ -139,10 +139,10 @@ esp_err_t I2cMaster_ReadReg(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr, uin
   * @brief  I2C master write data continuously.
   *         This function cannot be used to manipulate the registers of I2C slave devices, 
   *         otherwise please use I2cMaster_WriteReg().
-  * @param[in]  i2c_handle i2c master operation handle.
-  * @param[in]  i2c_addr i2c slave address(7bit).
-  * @param[in]  data_buf Data pointer.
-  * @param[in]  data_len Data length.
+  * @param[in]  i2c_handle  i2c master operation handle.
+  * @param[in]  i2c_addr  i2c slave address(7bit).
+  * @param[in]  data_buf  Data pointer.
+  * @param[in]  data_len  Data length.
   * @retval  reference esp_err_t.
   * @note  Most I2C slave devices use register operations, this function is not commonly used.
   */
@@ -153,10 +153,10 @@ esp_err_t I2cMaster_WriteData(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr, u
   * @brief  I2C master read data continuously.
   *         This function cannot be used to manipulate the registers of I2C slave devices, 
   *         otherwise please use I2cMaster_ReadReg().
-  * @param[in]  i2c_handle i2c master operation handle.
-  * @param[in]  i2c_addr i2c slave address(7bit).
-  * @param[out] data_buf Data pointer.
-  * @param[in]  data_len Data length.
+  * @param[in]  i2c_handle  i2c master operation handle.
+  * @param[in]  i2c_addr  i2c slave address(7bit).
+  * @param[out] data_buf  Data pointer.
+  * @param[in]  data_len  Data length.
   * @retval reference esp_err_t.
   * @note  Most I2C slave devices use register operations, this function is not commonly used.
   */
@@ -165,12 +165,12 @@ esp_err_t I2cMaster_ReadData(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr, ui
 
 /**
   * @brief  I2C master writes bits to the slave register.
-  * @param[in]  i2c_handle i2c master operation handle.
-  * @param[in]  i2c_addr i2c slave address(7bit). 
-  * @param[in]  reg_addr i2c slave register address.
-  * @param[in]  bit_num bit number(0~7).
-  * @param[in]  bit_val bit value, Do not exceed the maximum number of digits of bit_len.
-  * @param[in]  bit_len bit length(1~8).
+  * @param[in]  i2c_handle  i2c master operation handle.
+  * @param[in]  i2c_addr  i2c slave address(7bit). 
+  * @param[in]  reg_addr  i2c slave register address.
+  * @param[in]  bit_num  bit number(0~7).
+  * @param[in]  bit_val  bit value, Do not exceed the maximum number of digits of bit_len.
+  * @param[in]  bit_len  bit length(1~8).
   * @retval  reference esp_err_t.
   * @note  When using this function, you should ensure that the operating register is readable.
   * @note  example: 
@@ -191,12 +191,12 @@ esp_err_t I2cMaster_WriteRegBit(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr,
 
 /**
   * @brief  I2C master read bits from the slave register.
-  * @param[in]  i2c_handle i2c master operation handle.
-  * @param[in]  i2c_addr i2c slave address(7bit). 
-  * @param[in]  reg_addr i2c slave register address.
-  * @param[in]  bit_num bit number(0~7).
-  * @param[out] bit_val bit value.
-  * @param[in]  bit_len bit length(1~8).
+  * @param[in]  i2c_handle  i2c master operation handle.
+  * @param[in]  i2c_addr  i2c slave address(7bit). 
+  * @param[in]  reg_addr  i2c slave register address.
+  * @param[in]  bit_num  bit number(0~7).
+  * @param[out] bit_val  bit value.
+  * @param[in]  bit_len  bit length(1~8).
   * @retval  reference esp_err_t.
   * @note  When using this function, you should ensure that the operating register is readable.
   * @note  example: 
