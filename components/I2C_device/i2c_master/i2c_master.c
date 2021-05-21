@@ -41,13 +41,13 @@ static bool i2c_num_1_install = false;
   * @retval 
   *         successful ：return I2C operation handle.
   *         failed ：return NULL.
+  * @note  Use I2cMaster_Deinit() to release it.
   */
 I2cMaster_handle_t I2cMaster_Init(i2c_port_t I2c_port, gpio_num_t scl_num, gpio_num_t sda_num, 
                                   uint32_t i2c_clk)
 {
     esp_err_t err = ESP_OK;
 
-    // Prevent i2c from reinitializing.
     if (0 == I2c_port && true == i2c_num_0_install) {
         ESP_LOGE(TAG, "%s (%d) i2c num0 has been initialized.", __FUNCTION__, __LINE__);
         return NULL;
@@ -86,8 +86,6 @@ I2cMaster_handle_t I2cMaster_Init(i2c_port_t I2c_port, gpio_num_t scl_num, gpio_
     }
         
     i2c_handle->i2c_port = I2c_port;
-    i2c_handle->scl_num = scl_num;
-    i2c_handle->sda_num = sda_num;
     i2c_handle->i2c_clk = i2c_clk;
     ESP_LOGI(TAG, "%s (%d) i2c master init ok.", __FUNCTION__, __LINE__);
     return i2c_handle;
@@ -106,6 +104,7 @@ I2C_MASTER_INIT_FAIL:
   *         - ESP_OK    successful.
   *         - ESP_FAIL  failed.
   *                     May be caused by no initialization.
+  * @note  Can only be used to release the handle obtained by I2cMaster_Init().
   */
 esp_err_t I2cMaster_Deinit(I2cMaster_handle_t* i2c_handle)
 {
@@ -129,6 +128,78 @@ esp_err_t I2cMaster_Deinit(I2cMaster_handle_t* i2c_handle)
     free(*i2c_handle);
     *i2c_handle = NULL;
     ESP_LOGI(TAG, "%s (%d) i2c master deinit ok.", __FUNCTION__, __LINE__);
+    return ESP_OK;
+}
+
+/**
+  * @brief  Get an I2cMaster operation handle of the initialized i2c port.
+  *         This function does not initialize the I2C device, but only provides 
+  *         an operation handle compatible with this library.
+  * @param[in]  I2c_port esp32 i2c port number, i2c0 or i2c1.
+  *                      Make sure that this port has been initialized.
+  * @param[in]  i2c_clk The transmission speed.
+  *                     Make sure that this value is the same as the initialization.
+  * @retval 
+  *         successful ：return I2C operation handle.
+  *         failed ：return NULL.
+  * @note  Use I2cMaster_DeleteHandleNoInit() to release it.
+  * @note  This function is provided for compatibility with this library without modifying 
+  *        the original code. It is used when the I2C port has been initialized, otherwise 
+  *        it is recommended to use I2cMaster_Init() in any other situations.
+  */        
+I2cMaster_handle_t I2cMaster_GetHandleNoInit(i2c_port_t I2c_port, uint32_t i2c_clk)
+{
+    if (0 == I2c_port && true == i2c_num_0_install) {
+        ESP_LOGE(TAG, "%s (%d) i2c num0 has been initialized.", __FUNCTION__, __LINE__);
+        return NULL;
+    } else if (1 == I2c_port && true == i2c_num_1_install) {
+        ESP_LOGE(TAG, "%s (%d) i2c num1 has been initialized.", __FUNCTION__, __LINE__);
+        return NULL;
+    }
+
+    I2cMaster_handle_t i2c_handle = malloc(sizeof(I2cMaster_t));
+    if (NULL == i2c_handle) {
+        ESP_LOGE(TAG, "%s (%d) driver handle malloc failed.", __FUNCTION__, __LINE__);
+        return NULL;
+    }
+
+    if (0 == I2c_port) {
+        i2c_num_0_install = true;
+    } else if (1 == I2c_port) {
+        i2c_num_1_install = true;
+    }
+        
+    i2c_handle->i2c_port = I2c_port;
+    i2c_handle->i2c_clk = i2c_clk;
+    ESP_LOGI(TAG, "%s (%d) i2c master get handle ok.", __FUNCTION__, __LINE__);
+    return i2c_handle;
+}
+
+/**
+  * @brief  Delete uninitialized i2c master handle.
+  * @param[in]  i2c_handle i2c master operation handle pointer.
+  * @retval 
+  *         - ESP_OK    successful.
+  *         - ESP_FAIL  failed.
+  * @note  Can only be used to release the handle obtained by I2cMaster_GetHandleNoInit().
+  */ 
+esp_err_t I2cMaster_DeleteHandleNoInit(I2cMaster_handle_t* i2c_handle)
+{
+    esp_err_t err = ESP_OK;
+
+    if (NULL == *i2c_handle) {
+        ESP_LOGE(TAG, "%s (%d) driver handle NULL.", __FUNCTION__, __LINE__);
+        return ESP_FAIL;
+    }
+
+    if(0 == (*i2c_handle)->i2c_port)
+        i2c_num_0_install = false;
+    else if(1 == (*i2c_handle)->i2c_port)
+        i2c_num_1_install = false;
+
+    free(*i2c_handle);
+    *i2c_handle = NULL;
+    ESP_LOGI(TAG, "%s (%d) i2c master handle delete ok.", __FUNCTION__, __LINE__);
     return ESP_OK;
 }
 

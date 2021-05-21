@@ -30,8 +30,6 @@
 
 typedef struct{
     i2c_port_t i2c_port;
-    gpio_num_t scl_num;
-    gpio_num_t sda_num;
     uint32_t i2c_clk;
 }I2cMaster_t;
 typedef I2cMaster_t *I2cMaster_handle_t;
@@ -59,6 +57,34 @@ I2cMaster_handle_t I2cMaster_Init(i2c_port_t I2c_port, gpio_num_t scl_num, gpio_
   *                     May be caused by no initialization.
   */
 esp_err_t I2cMaster_Deinit(I2cMaster_handle_t* i2c_handle);
+
+/**
+  * @brief  Get an I2cMaster operation handle of the initialized i2c port.
+  *         This function does not initialize the I2C device, but only provides 
+  *         an operation handle compatible with this library.
+  * @param[in]  I2c_port esp32 i2c port number, i2c0 or i2c1.
+  *                      Make sure that this port has been initialized.
+  * @param[in]  i2c_clk The transmission speed.
+  *                     Make sure that this value is the same as the initialization.
+  * @retval 
+  *         successful ：return I2C operation handle.
+  *         failed ：return NULL.
+  * @note  Use I2cMaster_DeleteHandleNoInit() to release it.
+  * @note  This function is provided for compatibility with this library without modifying 
+  *        the original code. It is used when the I2C port has been initialized, otherwise 
+  *        it is recommended to use I2cMaster_Init() in any other situations.
+  */        
+I2cMaster_handle_t I2cMaster_GetHandleNoInit(i2c_port_t I2c_port, uint32_t i2c_clk);
+
+/**
+  * @brief  Delete uninitialized i2c master handle.
+  * @param[in]  i2c_handle i2c master operation handle pointer.
+  * @retval 
+  *         - ESP_OK    successful.
+  *         - ESP_FAIL  failed.
+  * @note  Can only be used to release the handle obtained by I2cMaster_GetHandleNoInit().
+  */ 
+esp_err_t I2cMaster_DeleteHandleNoInit(I2cMaster_handle_t* i2c_handle);
 
 /**
   * @brief  Check if the I2C slave alive.
