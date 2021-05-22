@@ -110,7 +110,7 @@ static esp_err_t paj7620u2_wakeup(PAJ7620U2_handle_t paj7620u2_handle)
   * @brief  Initialize the PAJ7620U2 and obtain an operation handle.
   * @param[in]  i2c_handle  i2c master operation handle.
   * @param[in]  i2c_addr  i2c slave address(7bit).
-  *                      Under normal circumstances it is 0X73.
+  *                       Under normal circumstances it is 0X73.
   * @retval  
   *         successful  paj7620u2 operation handle.
   *         failed      NULL.
@@ -174,7 +174,6 @@ PAJ7620U2_INIT_FAILED:
   * @retval 
   *         - ESP_OK    successful.
   *         - ESP_FAIL  failed.
-  *                     May be caused by no initialization.
   */
 esp_err_t PAJ7620U2_Deinit(PAJ7620U2_handle_t* paj7620u2_handle)
 {
