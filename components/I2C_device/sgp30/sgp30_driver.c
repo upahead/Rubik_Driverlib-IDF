@@ -51,7 +51,7 @@ SGP30_handle_t SGP30_Init(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr)
     esp_err_t err = ESP_OK;
     uint8_t cmd_buf[2] = {0};
 
-    if(NULL == i2c_handle){
+    if (NULL == i2c_handle) {
         ESP_LOGE(TAG, "%s (%d) i2c handle is not initialized.", __FUNCTION__, __LINE__);
         return NULL;
     }
