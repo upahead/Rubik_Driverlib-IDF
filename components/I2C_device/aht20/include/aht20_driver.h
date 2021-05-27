@@ -1,3 +1,9 @@
+/**
+  * @file           aht20_driver.h
+  * @version        1.0
+  * @date           2021-5-27
+  */
+
 #ifndef __AHT20_DRIVER_H__
 #define __AHT20_DRIVER_H__
 

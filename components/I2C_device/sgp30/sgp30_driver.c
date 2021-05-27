@@ -138,7 +138,7 @@ static uint8_t CheckCrc8(uint8_t* const message, uint8_t initial_value)
 
 /**
   * @brief  SGP30 send statrt messure command.
-  * @param[in]  sgp30_handle  sgp30 operation handle pointer.
+  * @param[in]  sgp30_handle  sgp30 operation handle.
   * @retval 
   *         - ESP_OK    successful.
   *         - ESP_FAIL  failed.
@@ -162,7 +162,7 @@ esp_err_t SGP30_StartMessure(SGP30_handle_t sgp30_handle)
 
 /**
   * @brief  SGP30 get co2 and tvoc value.
-  * @param[in]  sgp30_handle  sgp30 operation handle pointer.
+  * @param[in]  sgp30_handle  sgp30 operation handle.
   * @param[out]  co2_val  co2 value.
   * @param[out]  tvoc_val  TVOC value.
   * @retval 
