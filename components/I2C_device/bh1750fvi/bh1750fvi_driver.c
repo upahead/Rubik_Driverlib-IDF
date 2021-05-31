@@ -39,7 +39,9 @@ static const char *TAG = "BH1750FVI";
   * @brief  Initialize the bh1750fvi and obtain an operation handle.
   * @param[in]  i2c_handle  i2c master operation handle.
   * @param[in]  i2c_addr  i2c slave address(7bit).
-  *                       
+  *                       ADDR = 'H'  0X5C
+  *                       ADDR = 'L'  0X23                      
+  * 
   * @retval  
   *         successful  bh1750fvi operation handle.
   *         failed      NULL.
