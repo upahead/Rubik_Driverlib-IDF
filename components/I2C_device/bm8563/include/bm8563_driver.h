@@ -70,7 +70,7 @@ typedef BM8563_t *BM8563_handle_t;
   * @param[in]  i2c_addr  i2c slave address(7bit).
   *                       Under normal circumstances it is 0x51.
   * @retval  
-  *         successful  sgp30 operation handle.
+  *         successful  bm8563 operation handle.
   *         failed      NULL.
   * @note  Use BM8563_Deinit() to release it.
   */
