@@ -63,7 +63,7 @@ esp_err_t BH1750FVI_Deinit(BH1750FVI_handle_t* bh1750fvi_handle);
 
 /**
   * @brief  BH1750FVI Get data once.
-  * @param[in]  sgp30_handle  bh1750fvi operation handle.
+  * @param[in]  bh1750fvi_handle  bh1750fvi operation handle.
   * @param[out]  brightness  brightness data, (0-65535), unit: lx
   * @retval 
   *         - ESP_OK    successful.
