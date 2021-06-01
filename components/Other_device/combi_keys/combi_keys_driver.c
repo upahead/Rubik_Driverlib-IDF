@@ -138,7 +138,7 @@ esp_err_t CombiKeys_SetLongPress(CombiKey_handle_t combi_keys_handle, uint32_t t
   * @retval 
   *         system time(us)
   */
-static int64_t Combi_get_current_time(void)
+static int64_t combi_get_current_time(void)
 {
     struct timeval tv_now;
     gettimeofday(&tv_now, NULL);
@@ -165,21 +165,21 @@ CombiKey_Value_t CombiKeys_GetValue(CombiKey_handle_t combi_keys_handle)
             vTaskDelay(10 / portTICK_PERIOD_MS);
             if(0 == gpio_get_level(combi_keys_handle->key_up)){
                 current_press = COMBI_KEY_UP_VALUE_PRESS;
-                begin_time = Combi_get_current_time();
+                begin_time = combi_get_current_time();
                 return COMBI_KEY_UP_VALUE_PRESS;
             } 
         }else if(0 == gpio_get_level(combi_keys_handle->key_mid)){
             vTaskDelay(10 / portTICK_PERIOD_MS);
             if(0 == gpio_get_level(combi_keys_handle->key_mid)){
                 current_press = COMBI_KEY_MID_VALUE_PRESS;
-                begin_time = Combi_get_current_time();
+                begin_time = combi_get_current_time();
                 return COMBI_KEY_MID_VALUE_PRESS;
             }
         }else if(0 == gpio_get_level(combi_keys_handle->key_down)){
             vTaskDelay(10 / portTICK_PERIOD_MS);
             if(0 == gpio_get_level(combi_keys_handle->key_down)){
                 current_press = COMBI_KEY_DOUN_VALUE_PRESS;
-                begin_time = Combi_get_current_time();
+                begin_time = combi_get_current_time();
                 return COMBI_KEY_DOUN_VALUE_PRESS;
             }
         }else{
@@ -188,7 +188,7 @@ CombiKey_Value_t CombiKeys_GetValue(CombiKey_handle_t combi_keys_handle)
     }else{ // If a button is marked as pressed, judge whether the button is released, if released, judge whether to press long or short according to the system time.
         if(current_press == COMBI_KEY_UP_VALUE_PRESS){
             if(1 == gpio_get_level(combi_keys_handle->key_up)){
-                end_time = Combi_get_current_time();
+                end_time = combi_get_current_time();
                 if((end_time-begin_time) > (combi_keys_handle->long_press_time)*1000){
                     begin_time = 0;
                     current_press = COMBI_KEY_NONE_VALUE_PRESS;
@@ -202,7 +202,7 @@ CombiKey_Value_t CombiKeys_GetValue(CombiKey_handle_t combi_keys_handle)
             return COMBI_KEY_UP_VALUE_PRESS;
         }else if(current_press == COMBI_KEY_MID_VALUE_PRESS){
             if(1 == gpio_get_level(combi_keys_handle->key_mid)){
-                end_time = Combi_get_current_time();
+                end_time = combi_get_current_time();
                 if((end_time-begin_time) > (combi_keys_handle->long_press_time)*1000){
                     begin_time = 0;
                     current_press = COMBI_KEY_NONE_VALUE_PRESS;
@@ -216,7 +216,7 @@ CombiKey_Value_t CombiKeys_GetValue(CombiKey_handle_t combi_keys_handle)
             return COMBI_KEY_MID_VALUE_PRESS;
         }else if(current_press == COMBI_KEY_DOUN_VALUE_PRESS){
             if(1 == gpio_get_level(combi_keys_handle->key_down)){
-                end_time = Combi_get_current_time();
+                end_time = combi_get_current_time();
                 if((end_time-begin_time) > (combi_keys_handle->long_press_time)*1000){
                     begin_time = 0;
                     current_press = COMBI_KEY_NONE_VALUE_PRESS;
