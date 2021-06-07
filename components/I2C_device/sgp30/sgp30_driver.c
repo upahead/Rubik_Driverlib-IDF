@@ -80,7 +80,6 @@ SGP30_handle_t SGP30_Init(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr)
         goto SGP30_INIT_FAILED;
     }
     vTaskDelay(100 / portTICK_PERIOD_MS);
-
     // Send initialize the air quality measurement command.
     cmd_buf[0] = (uint8_t)(SGP30_INIT_AIR_QUALITY>>8);
     cmd_buf[1] = (uint8_t)SGP30_INIT_AIR_QUALITY;
@@ -90,7 +89,6 @@ SGP30_handle_t SGP30_Init(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr)
         goto SGP30_INIT_FAILED;
     }
     vTaskDelay(100 / portTICK_PERIOD_MS);
-
     ESP_LOGI(TAG, "%s (%d) sgp30 init ok.", __FUNCTION__, __LINE__);
     return sgp30_handle;
 
