@@ -121,6 +121,28 @@ RGBled_Color_t RGBled_GetRgb888(uint8_t red, uint8_t green, uint8_t blue);
 esp_err_t RGBled_SetAllColor(RGBled_handle_t rgb_handle, RGBled_Color_t *color_list);
 
 /**
+  * @brief  RGBled Set the color of any length lamp.
+  * @param[in]  rgb_handle  RGBled operation handle.
+  * @param[in]  color  RGB color.
+  * @param[in]  led_len  The length to be lit.            
+  * @retval 
+  *         - ESP_OK    successful.
+  *         - ESP_FAIL  failed.
+  */
+esp_err_t RGBled_SetLenColor(RGBled_handle_t rgb_handle, RGBled_Color_t color, uint32_t led_len);
+
+/**
+  * @brief  RGBled Set the color of any length lamp, From the middle to the sides.
+  * @param[in]  rgb_handle  RGBled operation handle.
+  * @param[in]  color  RGB color.
+  * @param[in]  led_len  The length to be lit.            
+  * @retval 
+  *         - ESP_OK    successful.
+  *         - ESP_FAIL  failed.
+  */
+esp_err_t RGBled_SetLenColorMid(RGBled_handle_t rgb_handle, RGBled_Color_t color, uint32_t led_len);
+
+/**
   * @brief  RGBled Set all lights to one color.
   * @param[in]  rgb_handle  RGBled operation handle.
   * @param[in]  color_data  RGB888 color data.

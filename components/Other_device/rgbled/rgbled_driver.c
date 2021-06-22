@@ -214,6 +214,73 @@ esp_err_t RGBled_SetAllColor(RGBled_handle_t rgb_handle, RGBled_Color_t *color_l
 }
 
 /**
+  * @brief  RGBled Set the color of any length lamp.
+  * @param[in]  rgb_handle  RGBled operation handle.
+  * @param[in]  color  RGB color.
+  * @param[in]  led_len  The length to be lit.            
+  * @retval 
+  *         - ESP_OK    successful.
+  *         - ESP_FAIL  failed.
+  */
+esp_err_t RGBled_SetLenColor(RGBled_handle_t rgb_handle, RGBled_Color_t color, uint32_t led_len)
+{
+    RGBLED_HANDLE_CHECK(rgb_handle, ESP_FAIL);
+
+    RGBled_Color_t color_val = color;
+
+    int* pixels = malloc(sizeof(int) * rgb_handle->led_len);
+    if (NULL == pixels) {
+        return ESP_FAIL;
+    }
+        
+    // Convert RGB888 to GRB888.
+    for (uint32_t i=0; i<rgb_handle->led_len; i++) {
+        if(i < led_len)
+            pixels[i] = rgb_to_grb(color_val);
+        else
+            pixels[i] = rgb_to_grb(0x00);
+    }
+    RGBled_SendColorData(rgb_handle, pixels);
+    free(pixels);
+    return ESP_OK;
+}
+
+/**
+  * @brief  RGBled Set the color of any length lamp, From the middle to the sides.
+  * @param[in]  rgb_handle  RGBled operation handle.
+  * @param[in]  color  RGB color.
+  * @param[in]  led_len  The length to be lit.            
+  * @retval 
+  *         - ESP_OK    successful.
+  *         - ESP_FAIL  failed.
+  */
+esp_err_t RGBled_SetLenColorMid(RGBled_handle_t rgb_handle, RGBled_Color_t color, uint32_t led_len)
+{
+    RGBled_Color_t color_val = color;
+    uint32_t mid_num = (rgb_handle->led_len)/2;
+    uint32_t led_half = led_len/2;
+
+    int* pixels = malloc(sizeof(int) * rgb_handle->led_len);
+    if (NULL == pixels) {
+        return ESP_FAIL;
+    }
+        
+    // Convert RGB888 to GRB888.
+    for (uint32_t i=0; i<mid_num; i++) {
+        if(i < led_half){
+            pixels[mid_num+i] = rgb_to_grb(color_val);
+            pixels[mid_num-i-1] = rgb_to_grb(color_val);
+        }else{
+            pixels[mid_num+i] = rgb_to_grb(0x00);
+            pixels[mid_num-i-1] = rgb_to_grb(0x00);
+        }
+    }
+    RGBled_SendColorData(rgb_handle, pixels);
+    free(pixels);
+    return ESP_OK;
+}
+
+/**
   * @brief  RGBled Set all lights to one color.
   * @param[in]  rgb_handle  RGBled operation handle.
   * @param[in]  color_data  RGB888 color data.

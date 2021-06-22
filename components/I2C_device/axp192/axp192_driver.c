@@ -47,8 +47,6 @@ static const char *TAG = "AXP192";
   */
 AXP192_handle_t AXP192_Init(I2cMaster_handle_t i2c_handle, uint8_t i2c_addr)
 {
-    esp_err_t err = ESP_OK;
-
     if (NULL == i2c_handle) {
         ESP_LOGE(TAG, "%s (%d) i2c handle is not initialized.", __FUNCTION__, __LINE__);
         return NULL;
