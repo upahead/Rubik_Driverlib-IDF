@@ -29,6 +29,8 @@ void app_main(void)
     if(NULL == rgbled){
         printf("rgbled init failed.");
     }
+    RGBled_handle_t rgbled_1 = RGBled_Init(RGBLED_DEVICE_TYPE_WS2812, 32, 60, RMT_CHANNEL_0);
+    RGBled_handle_t rgbled_2 = RGBled_Init(RGBLED_DEVICE_TYPE_WS2812, 33, 60, RMT_CHANNEL_0);
 
     xTaskCreatePinnedToCore(MicCollectTask, "MicCollectTask", 4096*2, NULL, 0, NULL, 1);
 
@@ -67,8 +69,12 @@ void app_main(void)
 #elif 1
         if(cur_light_num < new_light_num){
             RGBled_SetLenColorMid(rgbled, light_color, cur_light_num++);
+            RGBled_SetLenColorMid(rgbled_1, light_color, cur_light_num-5);
+            RGBled_SetLenColorMid(rgbled_2, light_color, cur_light_num-5);
         }else if(cur_light_num > new_light_num){
             RGBled_SetLenColorMid(rgbled, light_color, cur_light_num--);
+            RGBled_SetLenColorMid(rgbled_1, light_color, cur_light_num-5);
+            RGBled_SetLenColorMid(rgbled_2, light_color, cur_light_num-5);
         }
             
 #endif 
