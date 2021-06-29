@@ -16,8 +16,9 @@
 #include "1_test_obj.h"
 #include "2_test_label.h"
 #include "3_test_style.h"
+#include "4_test_font.h"
 
-#define LV_TEST_ITEM    3
+#define LV_TEST_ITEM    4
 
 /* Littlevgl specific */
 #ifdef LV_CONF_INCLUDE_SIMPLE
@@ -109,6 +110,8 @@ static void guiTask(void *pvParameter) {
     lv_test_label();
 #elif LV_TEST_ITEM == 3
     lv_test_style();
+#elif LV_TEST_ITEM == 4
+    lv_test_font();
 #endif
     while (1) {
         /* Delay 1 tick (assumes FreeRTOS tick is 10ms */
