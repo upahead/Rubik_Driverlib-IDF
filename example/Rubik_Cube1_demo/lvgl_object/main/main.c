@@ -18,8 +18,9 @@
 #include "3_test_style.h"
 #include "4_test_font.h"
 #include "5_test_cont.h"
+#include "6_test_btn.h"
 
-#define LV_TEST_ITEM    5
+#define LV_TEST_ITEM    6
 
 /* Littlevgl specific */
 #ifdef LV_CONF_INCLUDE_SIMPLE
@@ -115,6 +116,8 @@ static void guiTask(void *pvParameter) {
     lv_test_font();
 #elif LV_TEST_ITEM == 5
     lv_test_cont();
+#elif LV_TEST_ITEM == 6
+    lv_test_btn();
 #endif
     while (1) {
         /* Delay 1 tick (assumes FreeRTOS tick is 10ms */
