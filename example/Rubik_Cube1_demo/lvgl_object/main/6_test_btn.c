@@ -57,7 +57,6 @@ void lv_test_btn(void)
     // Get screen object.
     lv_obj_t* screen = lv_scr_act(); 
 
-    // 
     btn1 = lv_btn_create(screen, NULL);
     lv_obj_align(btn1, screen, LV_ALIGN_CENTER, 0, 0);
     lv_obj_set_drag(btn1, true);                        // Open drag.
