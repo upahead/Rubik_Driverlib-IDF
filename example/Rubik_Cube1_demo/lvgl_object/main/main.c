@@ -20,8 +20,9 @@
 #include "5_test_cont.h"
 #include "6_test_btn.h"
 #include "7_test_page.h"
+#include "8_test_tabview.h"
 
-#define LV_TEST_ITEM    7
+#define LV_TEST_ITEM    8
 
 /* Littlevgl specific */
 #ifdef LV_CONF_INCLUDE_SIMPLE
@@ -121,6 +122,8 @@ static void guiTask(void *pvParameter) {
     lv_test_btn();
 #elif LV_TEST_ITEM == 7
     lv_test_page();
+#elif LV_TEST_ITEM == 8
+    lv_test_tabview();
 #endif
     while (1) {
         /* Delay 1 tick (assumes FreeRTOS tick is 10ms */
